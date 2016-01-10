@@ -2,19 +2,16 @@
 .DS_Store
 
 # ignore JetBrains project
-.idea
+.idea/
 
 # ignore vagrant
 .vagrant/
 
-# ignore bundles
-.bundle/
-
 # ignore sqlite DBs
 *.db
 
-#ignore virtualenv directories
-virtualenv/
+# ignore instance configuration
+instance/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
