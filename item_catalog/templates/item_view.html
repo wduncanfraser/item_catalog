@@ -1,0 +1,9 @@
+{% extends 'layout.html' %}
+{% block title %}: {{ item }}{% endblock %}
+{% block content %}
+    {# Render item #}
+    <h2>{{ item.name }}</h2>
+    <p>{{ item.description }}</p>
+    {{ item.category }}
+
+{% endblock %}

@@ -1,0 +1,10 @@
+{% extends 'layout.html' %}
+{% block title %}: Categories{% endblock %}
+{% block content %}
+    {# Render list of items in category #}
+    {{ category }}
+    {% for item in items %}
+        <p><a href="{{ url_for('item_view', item_id = item.id) }}">{{ item }}</a></p>
+    {% endfor %}
+
+{% endblock %}

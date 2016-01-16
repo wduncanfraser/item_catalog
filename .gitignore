@@ -7,6 +7,9 @@
 # ignore vagrant
 .vagrant/
 
+# ignore virtual environment
+.virtualenv/
+
 # ignore sqlite DBs
 *.db
 
