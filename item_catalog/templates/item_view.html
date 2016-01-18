@@ -3,7 +3,8 @@
 {% block content %}
     {# Render item #}
     <h2>{{ item.name }}</h2>
-    <p>{{ item.description }}</p>
-    {{ item.category }}
+    <p>{{ item.description }}
+    <br>{{ item.category }}
+    <br><a href="{{ url_for('item_edit', item_id=item.id) }}">Edit</a></p>
 
 {% endblock %}

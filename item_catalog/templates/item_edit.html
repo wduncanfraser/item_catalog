@@ -1,0 +1,14 @@
+{% extends 'layout.html' %}
+{% block title %}: {% if item %}{{ item }}{% else %}New{% endif %}{% endblock %}
+{% block content %}
+    {# Render item form for creating/editing #}
+    <form method="POST" action="{% if item %}{{ url_for('item_edit', item_id=item.id) }}{% else %}{{ url_for('item_new') }}{% endif %}">
+        {{ form.hidden_tag() }}
+        {{ form.name.label }}{{ form.name }}
+        {{ form.description.label }}{{ form.description }}
+        {{ form.picture_url.label }}{{ form.picture_url }}
+        {{ form.category.label }}{{ form.category }}
+        <input type="submit" value="Submit">
+    </form>
+
+{% endblock %}

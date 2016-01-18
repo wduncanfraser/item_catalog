@@ -16,7 +16,7 @@ items = []
 items.append(Item('Screwdriver', 'A screwdriver screws things', None, category_tools))
 items.append(Item('Wrench', 'A wrench wrenches things', None, category_tools))
 items.append(Item('Saw', 'A saw saws things', None, category_tools))
-items.append(Item('Lego', 'Best toy ever', None, category_toys))
+items.append(Item('Legos', 'Best toy ever', None, category_toys))
 items.append(Item('Micro Machines', 'Small toys that are good for accidently stepping on.', None, category_toys))
 items.append(Item('Hotwheels', 'Vroom Vroom', None, category_toys))
 items.append(Item('Television',

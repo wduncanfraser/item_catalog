@@ -4,7 +4,8 @@
     {# Render list of items in category #}
     {{ category }}
     {% for item in items %}
-        <p><a href="{{ url_for('item_view', item_id = item.id) }}">{{ item }}</a></p>
+        <p><a href="{{ url_for('item_view', item_id = item.id) }}">{{ item }}</a>
+        <br><a href="">Edit</a></p>
     {% endfor %}
 
 {% endblock %}

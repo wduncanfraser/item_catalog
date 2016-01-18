@@ -1,3 +1,4 @@
+from sqlalchemy import func
 from item_catalog import db
 
 
@@ -20,9 +21,6 @@ class Category(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(64), nullable=False)
 
-    def __init__(self, name):
-        self.name = name
-
     def __unicode__(self):
         return u'%s' % self.name
 
@@ -36,14 +34,9 @@ class Item(db.Model):
     name = db.Column(db.String(128), nullable=False)
     description = db.Column(db.String(256))
     picture_url = db.Column(db.String(256))
+    edit_timestamp = db.Column(db.DateTime, default=func.now())
     category_id = db.Column(db.Integer, db.ForeignKey('category.id'))
     category = db.relationship(Category, backref='items')
-
-    def __init__(self, name, description, picture_url, category):
-        self.name = name
-        self.description = description
-        self.picture_url = picture_url
-        self.category = category
 
     def __unicode__(self):
         return u'%s' % self.name
