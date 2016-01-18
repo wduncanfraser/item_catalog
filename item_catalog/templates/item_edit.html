@@ -2,13 +2,34 @@
 {% block title %}: {% if item %}{{ item }}{% else %}New{% endif %}{% endblock %}
 {% block content %}
     {# Render item form for creating/editing #}
-    <form method="POST" action="{% if item %}{{ url_for('item_edit', item_id=item.id) }}{% else %}{{ url_for('item_new') }}{% endif %}">
+    <form method="POST" action="
+            {% if item %}{{ url_for('item_edit', item_id=item.id) }}{% else %}{{ url_for('item_new') }}{% endif %}">
         {{ form.hidden_tag() }}
-        {{ form.name.label }}{{ form.name }}
-        {{ form.description.label }}{{ form.description }}
-        {{ form.picture_url.label }}{{ form.picture_url }}
-        {{ form.category.label }}{{ form.category }}
-        <input type="submit" value="Submit">
+        <div class="mdl-grid">
+            <div class="mdl-cell mdl-cell--12-col" align="center">
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                    {{ form.name.label(class_='mdl-textfield__label') }}{{ form.name(class_='mdl-textfield__input') }}
+                </div>
+            </div>
+            <div class="mdl-cell mdl-cell--12-col" align="center">
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                    {{ form.picture_url.label(class_='mdl-textfield__label') }}{{ form.picture_url(class_='mdl-textfield__input') }}
+                </div>
+            </div>
+            <div class="mdl-cell mdl-cell--12-col" align="center">
+                <div class="mdl-textfield mdl-js-textfield">
+                    {{ form.description.label(class_='mdl-textfield__label') }}{{ form.description(class_='mdl-textfield__input') }}
+                </div>
+            </div>
+            <div class="mdl-cell mdl-cell--12-col" align="center">
+                {{ form.category.label }}{{ form.category }}
+            </div>
+            <div class="mdl-cell mdl-cell--12-col" align="center">
+                <input class="mdl-button mdl-js-button mdl-button--raised" type="submit" value="Submit">
+                <a class ="mdl-button mdl-js-button mdl-button--raised" href="
+                        {% if item %}{{ url_for('item_view', item_id = item.id) }}{% else %}{{ url_for('category_list') }}{% endif %}">Cancel</a>
+            </div>
+        </div>
     </form>
 
 {% endblock %}

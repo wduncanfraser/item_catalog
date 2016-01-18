@@ -1,10 +1,11 @@
 {% extends 'layout.html' %}
 {% block title %}: {{ item }}{% endblock %}
 {% block content %}
+    Return To: <a href="{{ url_for('category_view', category_id=item.category.id) }}">{{ item.category }}</a>
     {# Render item #}
     <h2>{{ item.name }}</h2>
     <p>{{ item.description }}
     <br>{{ item.category }}
-    <br><a href="{{ url_for('item_edit', item_id=item.id) }}">Edit</a></p>
+    <br><a href="{{ url_for('item_edit', item_id=item.id) }}">Edit</a> <a href="{{ url_for('item_delete', item_id = item.id) }}">Delete</a></p>
 
 {% endblock %}

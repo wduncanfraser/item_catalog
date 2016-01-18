@@ -1,0 +1,10 @@
+{% extends 'layout.html' %}
+{% block title %}: {{ item }}{% endblock %}
+{% block content %}
+    {# Render item form for deleting item #}
+    <form method="POST" action="{{ url_for('item_delete', item_id=item.id) }}">
+        <p>Are you sure you want to delete?</p>
+        <input type="submit" value="Yes">
+    </form>
+
+{% endblock %}
