@@ -1,7 +1,7 @@
 from flask import render_template, redirect, url_for, abort, flash, request, jsonify, send_from_directory
 from werkzeug.contrib.atom import AtomFeed
 from werkzeug.utils import secure_filename
-import os
+from datetime import datetime
 from item_catalog import app, db
 from item_catalog.models import Category, Item, User
 from item_catalog.forms import ItemForm
@@ -169,7 +169,11 @@ def item_new(category_id=None):
         if form.picture.data:
             data = form.picture.data
             filename = secure_filename(data.filename)
-            item_path = save_uploaded_image(filename, data, item)
+            try:
+                item_path = save_uploaded_image(filename, data, item)
+            except:
+                abort(500)
+
             item.picture = item_path
             db.session.add(item)
             db.session.commit()
@@ -192,15 +196,19 @@ def item_edit(item_id):
     form = ItemForm(obj=item)
 
     if form.validate_on_submit():
+        item_path = item.picture
+
         if form.picture.data:
             data = form.picture.data
             filename = secure_filename(data.filename)
-            item_path = save_uploaded_image(filename, data, item)
-        else:
-            item_path = item.picture
+            try:
+                item_path = save_uploaded_image(filename, data, item)
+            except:
+                abort(500)
 
         form.populate_obj(item)
         item.picture = item_path
+        item.edit_timestamp = datetime.utcnow()
         db.session.add(item)
         db.session.commit()
         flash("Succesfully Saved %s" % item.name, 'notice')

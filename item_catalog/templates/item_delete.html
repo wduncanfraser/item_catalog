@@ -3,6 +3,7 @@
 {% block content %}
     {# Render item form for deleting item #}
     <form method="POST" action="{{ url_for('item_delete', item_id=item.id) }}">
+        {{ form.hidden_tag() }}
         <div class="mdl-grid">
             <div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--stretch"></div>
             <div class="mdl-cell mdl-cell--8-col mdl-cell--8-col-tablet" align="center">

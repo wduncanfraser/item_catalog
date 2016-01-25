@@ -1,6 +1,6 @@
 from sqlalchemy import func
+from flask import url_for
 from item_catalog import db
-
 
 # ---- Model Definitions ----#
 # User and authentication models
@@ -62,9 +62,10 @@ class Item(db.Model):
     def serialize(self):
         """Function that returns object data in easily serializeable format
         :return: Model fields in dict format"""
+        picture = url_for('item_image', item_id=self.id, _external=True) if self.picture else None
         return {
             'id': self.id,
             'name': self.name,
             'description': self.description,
-            'picture_url': self.picture_url,
+            'picture': picture
         }

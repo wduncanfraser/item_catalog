@@ -16,12 +16,16 @@
                 </div>
                 {% if item.picture %}
                     <div class="mdl-cell mdl-cell--12-col" align="left">
-                        <img id="{{ item.name }}_picture" class="item-image" src="{{ url_for('item_image', item_id=item.id) }}">
+                        <img id="{{ item.name }}_picture" class="item-image"
+                             src="{{ url_for('item_image', item_id=item.id) }}">
                         <div class="mdl-tooltip" for="{{ item.name }}_picture">
                             Photo of: {{ item.name }}
                         </div>
                     </div>
                 {% endif %}
+                <div class="mdl-cell mdl-cell--12-col" align="left">
+                    Last Edited: {{ item.edit_timestamp }}
+                </div>
                 <div class="mdl-cell mdl-cell--12-col" align="center">
                     <a class="mdl-button mdl-js-button mdl-button--raised"
                        href="{{ url_for('item_edit', item_id=item.id) }}">Edit</a>
