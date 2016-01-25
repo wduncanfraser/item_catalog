@@ -3,3 +3,6 @@ SQLAlchemy==1.0.11
 Flask-SQLAlchemy==2.1
 WTForms==2.1
 Flask-WTF==0.12
+Flask-Security==1.7.5
+Flask-Social==1.6.2
+Flask-Uploads==0.2.0

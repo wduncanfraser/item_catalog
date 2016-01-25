@@ -3,33 +3,62 @@
 {% block content %}
     {# Render item form for creating/editing #}
     <form method="POST" action="
-            {% if item %}{{ url_for('item_edit', item_id=item.id) }}{% else %}{{ url_for('item_new') }}{% endif %}">
+            {% if item %}{{ url_for('item_edit', item_id=item.id) }}{% else %}{{ url_for('item_new') }}{% endif %}"
+          enctype="multipart/form-data">
         {{ form.hidden_tag() }}
         <div class="mdl-grid">
-            <div class="mdl-cell mdl-cell--12-col" align="center">
-                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                    {{ form.name.label(class_='mdl-textfield__label') }}{{ form.name(class_='mdl-textfield__input') }}
+            <div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--stretch"></div>
+            <div class="mdl-cell mdl-cell--8-col mdl-cell--8-col-tablet" align="center">
+                <div class="mdl-grid mdl-color--grey-100">
+                    <div class="mdl-cell mdl-cell--12-col" align="left">
+                        <h2>Edit Item: {{ item }}</h2>
+                    </div>
+                    <div class="mdl-cell mdl-cell--12-col" align="left">
+                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label item-input">
+                            {{ form.name(class_='mdl-textfield__input') }}
+                            {{ form.name.label(class_='mdl-textfield__label') }}
+                        </div>
+                    </div>
+                    <div class="mdl-cell mdl-cell--12-col" align="left">
+                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label item-input">
+                            {{ form.description(class_='mdl-textfield__input', rows=10) }}
+                            {{ form.description.label(class_='mdl-textfield__label') }}
+                        </div>
+                    </div>
+                    {% if item and item.picture %}
+                        <div class="mdl-cell mdl-cell--12-col" align="left">
+                            <img id="{{ item.name }}_picture" class="item-image"
+                                 src="{{ url_for('item_image', item_id=item.id) }}">
+                            <div class="mdl-tooltip" for="{{ item.name }}_picture">
+                                Photo of: {{ item.name }}
+                            </div>
+                        </div>
+                    {% endif %}
+                    <div class="mdl-cell mdl-cell--12-col" align="left">
+                        {{ form.picture }}
+                    </div>
+                    <div class="mdl-cell mdl-cell--12-col" align="left">
+                        {{ form.category.label }}{{ form.category }}
+                    </div>
+                    <div class="mdl-cell mdl-cell--12-col" align="center">
+                        <input class="mdl-button mdl-js-button mdl-button--raised" type="submit" value="Submit">
+                        <a class="mdl-button mdl-js-button mdl-button--raised" href="
+                                {% if item %}{{ url_for('item_view', item_id = item.id) }}{% else %}{{ url_for('category_list') }}{% endif %}">
+                            Cancel
+                        </a>
+                    </div>
                 </div>
             </div>
-            <div class="mdl-cell mdl-cell--12-col" align="center">
-                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                    {{ form.picture_url.label(class_='mdl-textfield__label') }}{{ form.picture_url(class_='mdl-textfield__input') }}
-                </div>
-            </div>
-            <div class="mdl-cell mdl-cell--12-col" align="center">
-                <div class="mdl-textfield mdl-js-textfield">
-                    {{ form.description.label(class_='mdl-textfield__label') }}{{ form.description(class_='mdl-textfield__input') }}
-                </div>
-            </div>
-            <div class="mdl-cell mdl-cell--12-col" align="center">
-                {{ form.category.label }}{{ form.category }}
-            </div>
-            <div class="mdl-cell mdl-cell--12-col" align="center">
-                <input class="mdl-button mdl-js-button mdl-button--raised" type="submit" value="Submit">
-                <a class ="mdl-button mdl-js-button mdl-button--raised" href="
-                        {% if item %}{{ url_for('item_view', item_id = item.id) }}{% else %}{{ url_for('category_list') }}{% endif %}">Cancel</a>
-            </div>
+            <div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--stretch"></div>
         </div>
     </form>
-
+{% endblock %}
+{% block extra_js %}
+    {% if category %}
+        <script>
+            $(document).ready(function () {
+                $('#category').val("{{ category.id }}");
+            });
+        </script>
+    {% endif %}
 {% endblock %}

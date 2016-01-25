@@ -8,3 +8,4 @@ TESTING = False
 SECRET_KEY = 'development_key'
 SQLALCHEMY_DATABASE_URI = 'sqlite:///../instance/item_catalog.db'
 SQLALCHEMY_TRACK_MODIFICATIONS = False
+IMAGE_UPLOAD_DIRECTORY = '/home/vagrant/item_catalog/instance/images'

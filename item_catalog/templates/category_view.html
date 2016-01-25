@@ -2,9 +2,39 @@
 {% block title %}: Categories{% endblock %}
 {% block content %}
     {# Render list of items in category #}
-    {{ category }}
-    {% for item in items %}
-        <p><a href="{{ url_for('item_view', item_id = item.id, category_id = item.category.id) }}">{{ item }}</a>
-    {% endfor %}
+    <div class="mdl-grid">
+        <div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--stretch"></div>
+        <div class="mdl-cell mdl-cell--8-col mdl-cell--8-col-tablet" align="center">
+            <div class="mdl-grid mdl-color--grey-100">
+                <div class="mdl-cell mdl-cell--12-col" align="left">
+                    <h2>{{ category }}</h2>
+                    <p><a href="{{ url_for('item_new', category_id=category.id) }}">Add Item</a></p>
+                    <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th class="mdl-data-table__cell--non-numeric">Name</th>
+                            <th class="mdl-data-table__cell--non-numeric mdl-cell--hide-phone">Short Description</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for item in items %}
+                            <tr>
+                                <td>{{ item.id }}</td>
+                                <td class="mdl-data-table__cell--non-numeric">
+                                    <a href="{{ url_for('item_view', item_id = item.id, category_id = item.category.id) }}">{{ item }}</a>
+                                </td>
+                                <td class="mdl-data-table__cell--non-numeric mdl-cell--hide-phone">
+                                    {{ item.description | truncate(40) }}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--stretch"></div>
+    </div>
 
 {% endblock %}

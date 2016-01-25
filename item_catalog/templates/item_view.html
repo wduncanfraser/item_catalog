@@ -1,11 +1,35 @@
 {% extends 'layout.html' %}
 {% block title %}: {{ item }}{% endblock %}
 {% block content %}
-    Return To: <a href="{{ url_for('category_view', category_id=item.category.id) }}">{{ item.category }}</a>
     {# Render item #}
-    <h2>{{ item.name }}</h2>
-    <p>{{ item.description }}
-    <br>{{ item.category }}
-    <br><a href="{{ url_for('item_edit', item_id=item.id) }}">Edit</a> <a href="{{ url_for('item_delete', item_id = item.id) }}">Delete</a></p>
-
+    <div class="mdl-grid">
+        <div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--stretch"></div>
+        <div class="mdl-cell mdl-cell--8-col mdl-cell--8-col-tablet" align="center">
+            <div class="mdl-grid mdl-color--grey-100">
+                <div class="mdl-cell mdl-cell--12-col" align="left">
+                    <h2>{{ item.name }}</h2>
+                    Category: <a href="{{ url_for('category_view', category_id=item.category.id) }}">
+                    {{ item.category }}</a>
+                </div>
+                <div class="mdl-cell mdl-cell--12-col" align="left">
+                    <p>Description: {{ item.description }}</p>
+                </div>
+                {% if item.picture %}
+                    <div class="mdl-cell mdl-cell--12-col" align="left">
+                        <img id="{{ item.name }}_picture" class="item-image" src="{{ url_for('item_image', item_id=item.id) }}">
+                        <div class="mdl-tooltip" for="{{ item.name }}_picture">
+                            Photo of: {{ item.name }}
+                        </div>
+                    </div>
+                {% endif %}
+                <div class="mdl-cell mdl-cell--12-col" align="center">
+                    <a class="mdl-button mdl-js-button mdl-button--raised"
+                       href="{{ url_for('item_edit', item_id=item.id) }}">Edit</a>
+                    <a class="mdl-button mdl-js-button mdl-button--raised"
+                       href="{{ url_for('item_delete', item_id = item.id) }}">Delete</a>
+                </div>
+            </div>
+        </div>
+        <div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--stretch"></div>
+    </div>
 {% endblock %}

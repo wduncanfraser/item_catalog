@@ -24,6 +24,18 @@ class Category(db.Model):
     def __unicode__(self):
         return u'%s' % self.name
 
+    def __init__(self, name=None):
+        self.name = name
+
+    @property
+    def serialize(self):
+        """Function that returns object data in easily serializeable format
+        :return: Model fields in dict format"""
+        return {
+            'id': self.id,
+            'name': self.name,
+        }
+
 
 # Item Model
 class Item(db.Model):
@@ -32,11 +44,27 @@ class Item(db.Model):
     # Table Columns
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(128), nullable=False)
-    description = db.Column(db.String(256))
-    picture_url = db.Column(db.String(256))
+    description = db.Column(db.String(1024))
+    picture = db.Column(db.String(256))
     edit_timestamp = db.Column(db.DateTime, default=func.now())
     category_id = db.Column(db.Integer, db.ForeignKey('category.id'))
     category = db.relationship(Category, backref='items')
 
     def __unicode__(self):
         return u'%s' % self.name
+
+    def __init__(self, name='', description='', category=None):
+        self.name = name
+        self.description = description
+        self.category = category
+
+    @property
+    def serialize(self):
+        """Function that returns object data in easily serializeable format
+        :return: Model fields in dict format"""
+        return {
+            'id': self.id,
+            'name': self.name,
+            'description': self.description,
+            'picture_url': self.picture_url,
+        }

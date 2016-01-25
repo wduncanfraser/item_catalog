@@ -2,8 +2,28 @@
 {% block title %}: Categories{% endblock %}
 {% block content %}
     {# Render list of categories #}
-    {% for category in categories %}
-        <p><a href="{{ url_for('category_view', category_id = category.id) }}">{{ category }}</a></p>
-    {% endfor %}
+    <div class="mdl-grid">
+        <div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--stretch"></div>
+        <div class="mdl-cell mdl-cell--8-col mdl-cell--8-col-tablet" align="center">
+            <div class="mdl-grid mdl-color--grey-100">
+                <div class="mdl-cell mdl-cell--6-col" align="left">
+                    <h2>Categories</h2>
+                    {% for category in categories %}
+                        <p><a href="{{ url_for('category_view', category_id = category.id) }}">{{ category }}</a></p>
+                    {% endfor %}
+                </div>
+                <div class="mdl-cell mdl-cell--6-col" align="left">
+                    <h2>Recent Items</h2>
+                    {% for item in recent_items %}
+                        <p>
+                            <a href="{{ url_for('item_view', item_id = item.id, category_id = item.category.id) }}">{{ item }}</a>
+                        </p>
+                    {% endfor %}
+                    <hr>
+                    <p><a href="{{ url_for('item_new') }}">Add Item</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
 
 {% endblock %}

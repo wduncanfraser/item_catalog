@@ -5,16 +5,17 @@
     <title>Item Catalog{% block title %}{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/material.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/toastr.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/item_catalog.css') }}">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
 </head>
 <body>
 
 <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
-    <header class="mdl-layout__header mdl-color--teal-600">
+    <header class="mdl-layout__header">
         <div class="mdl-layout__header-row">
             <!-- Title -->
-            <span class="mdl-layout-title">Item Database</span>
+            <span class="mdl-layout-title"><a class="title-link" href="{{ url_for('category_list') }}">Item Database</a></span>
             <!-- Add spacer, to align navigation to the right -->
             <div class="mdl-layout-spacer"></div>
             <!-- Navigation. We hide it in small screens. -->
@@ -44,6 +45,9 @@
         <span class="mdl-layout-title">Item Database</span>
         <nav class="mdl-navigation">
             <a class="mdl-navigation__link" href="">Login Goes Here</a>
+            {% for category in categories %}
+                <a class="mdl-navigation__link" href="{{ url_for('category_view', category_id = category.id) }}">{{ category }}</a>
+            {% endfor %}
         </nav>
     </div>
     <main class="mdl-layout__content">
@@ -57,6 +61,7 @@
         </div>
         <div class="mdl-mini-footer--right-section">
             <ul class="mdl-mini-footer__link-list">
+                <li><a href="{{ url_for('recent_items_atom') }}">Atom</a></li>
                 <li>Author: <a href="https://github.com/wduncanfraser">W. Duncan Fraser</a></li>
                 <li><a href="https://github.com/wduncanfraser/item_catalog">Github Project</a></li>
             </ul>

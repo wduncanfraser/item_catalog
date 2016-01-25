@@ -1,0 +1,13 @@
+.item-image {
+    max-width: 320px;
+    max-height: 100%;
+}
+
+.title-link {
+    color: inherit;
+    text-decoration: inherit;
+}
+
+.item-input {
+    width: 80%;
+}
