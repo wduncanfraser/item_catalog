@@ -2,6 +2,7 @@ from sqlalchemy import func
 from flask import url_for
 from item_catalog import db
 
+
 # ---- Model Definitions ----#
 # User and authentication models
 # User model
@@ -11,6 +12,18 @@ class User(db.Model):
     # Table Columns
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(128), nullable=False)
+    email = db.Column(db.String(256), nullable=False)
+    picture = db.Column(db.String(256))
+    google_id = db.Column(db.String(21), unique=True, nullable=True)
+
+    def __unicode__(self):
+        return u'%s' % self.name
+
+    def __init__(self, name, email, picture=None, google_id=None):
+        self.name = name
+        self.email = email
+        self.picture = picture
+        self.google_id = google_id
 
 
 # Category Model
@@ -53,7 +66,7 @@ class Item(db.Model):
     def __unicode__(self):
         return u'%s' % self.name
 
-    def __init__(self, name='', description='', category=None):
+    def __init__(self, name=None, description=None, category=None):
         self.name = name
         self.description = description
         self.category = category

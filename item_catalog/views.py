@@ -1,11 +1,88 @@
-from flask import render_template, redirect, url_for, abort, flash, request, jsonify, send_from_directory
+from flask import render_template, redirect, url_for, abort, flash, request, jsonify, send_from_directory, session
 from werkzeug.contrib.atom import AtomFeed
 from werkzeug.utils import secure_filename
 from datetime import datetime
-from item_catalog import app, db
+import httplib2
+from item_catalog import app, db, google
 from item_catalog.models import Category, Item, User
 from item_catalog.forms import ItemForm
-from item_catalog.helpers import save_uploaded_image
+from item_catalog.helpers import save_uploaded_image, get_user_id, get_user, create_user
+
+
+# Account views
+@app.route('/login')
+def login():
+    """
+    Login view. Redirects to google authorization
+    """
+    return google.authorize(callback=url_for('authorized', _external=True))
+
+
+@app.route('/logout', methods=['GET', 'POST'])
+def logout():
+    """
+    Logout view. Revokes token and purges all login data from session.
+    """
+    if not session.get('google_token'):
+        flash('No User to Sign Out', 'warning')
+        return redirect(url_for('category_list'))
+
+    if request.method == 'POST':
+        url = '%s%s' % (app.config['GOOGLE_REVOKE_URL'], session['google_token'][0])
+        h = httplib2.Http()
+        result = h.request(url, 'GET')[0]
+
+        if result['status'] == '200':
+            session.pop('google_token', None)
+            session.pop('google_id', None)
+            session.pop('name', None)
+            session.pop('email', None)
+            session.pop('picture', None)
+            session.pop('user_id', None)
+            flash('Successfully Signed Out')
+        else:
+            flash('Failed to Revoke Google OAuth Token', 'error')
+
+        return redirect(url_for('category_list'))
+
+    return render_template('logout.html')
+
+
+@app.route('/login/authorized')
+def authorized():
+    """
+    Authorization return for OAuth. Populates session data on login. Creates or retrieves user based on google_id and
+    syncs user data with data provided by google.
+    """
+    resp = google.authorized_response()
+    if resp is None:
+        return 'Access denied: reason=%s error=%s' % (
+            request.args['error_reason'],
+            request.args['error_description']
+        )
+    session['google_token'] = (resp['access_token'], '')
+    user_info = google.get('userinfo')
+    session['google_id'] = user_info.data['id']
+    session['name'] = user_info.data['name']
+    session['email'] = user_info.data['email']
+    session['picture'] = user_info.data['picture']
+    # Get or create user and add the user_id to the session
+    session['user_id'] = get_user_id(session['google_id']) or create_user(session)[0].id
+    # Sync user data from google
+    user = get_user(session['user_id'])
+    user.name = session['name']
+    user.email = session['email']
+    user.picture = session['picture']
+    db.session.add(user)
+    db.session.commit()
+
+    flash('Signed in as %s' % session['name'])
+    return redirect(url_for('category_list'))
+
+
+@google.tokengetter
+def get_google_oauth_token():
+    return session.get('google_token')
 
 
 # Context processors

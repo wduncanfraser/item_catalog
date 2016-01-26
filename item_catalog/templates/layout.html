@@ -36,15 +36,22 @@
                            href="{{ url_for('category_view', category_id = category.id) }}">{{ category }}</a>
                     {% endfor %}
                 </div>
-
-                <a class="mdl-navigation__link" href="">Login Goes Here</a>
+                {% if 'google_token' in session %}
+                    <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent" href="{{ url_for('logout') }}">Logout</a>
+                {% else %}
+                    <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent" href="{{ url_for('login') }}">Google Login</a>
+                {% endif %}
             </nav>
         </div>
     </header>
     <div class="mdl-layout__drawer mdl-layout--small-screen-only">
         <span class="mdl-layout-title">Item Database</span>
         <nav class="mdl-navigation">
-            <a class="mdl-navigation__link" href="">Login Goes Here</a>
+            {% if 'google_token' in session %}
+                <a class="mdl-navigation__link" href="{{ url_for('logout') }}">Logout</a>
+            {% else %}
+                <a class="mdl-navigation__link" href="{{ url_for('login') }}">Google Login</a>
+            {% endif %}
             {% for category in categories %}
                 <a class="mdl-navigation__link" href="{{ url_for('category_view', category_id = category.id) }}">{{ category }}</a>
             {% endfor %}
