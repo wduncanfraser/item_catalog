@@ -8,26 +8,26 @@ Completed as part of Project 3 for the Udacity Full Stack Nonodegree.
 
 ## Usage
 1.  Clone repository: `git clone https://github.com/wduncanfraser/item_catalog.git`.
-1.  Run `vagrant up` and then `vagrant ssh to provision and log into the vm.
+1.  Run `vagrant up` and then `vagrant ssh` to provision and log into the vm.
 1.  Once logged into the VM, you should already be in the project directory. If not, navigate to the project files with ```cd /home/vagrant/item_catalog```.
 1.  Run `python setup.py` to initialize the database.
 1.  (Optional) Run `python test_data.py` to populate the database with some test data to get you started.
-1.  Run `python run.py` to run the flask application for the item catalog.
+1.  Run `python run.py` to run the Flask application for the item catalog.
 1.  Open a web browser and navigate to `http://localhost:5000`.
 
 ## Structure
-+   itemcatalog/: Item Catalog Flask application directory.
++   item_catalog/: Item Catalog Flask application directory.
     +   static/: Directory containing all static files.
     +   templates/: Directory containing all Jinja2 templates.
     +   __init__.py: Application definition and initialization.
     +   forms.py: WTForms declarations.
     +   helpers.py: Library of helper functions used throughout application.
-    +   models.py: SQLAlchemy ORM Model declarations
-    +   views.py: All views/routes used through the application.
+    +   models.py: SQLAlchemy ORM model declarations.
+    +   views.py: All views/routes used throughout the application.
 +   instance/: Instance specific files and configuration. Excluded from repository.
     +   config.py: Instance specific configuration. Overrides values in root config.py.
-    +   item_catalog.db: Default location of sqlite database
-    +   images/: Default directory containing images uploaded within the Item Catalog app.
+    +   item_catalog.db: Default location of sqlite database.
+    +   images/: Default directory containing images uploaded within the Item Catalog application.
 +   config.py: Flask configuration.
 +   requirements.txt: Python package requirements, installed during provisioning.
 +   run.py: Python file to start development server.

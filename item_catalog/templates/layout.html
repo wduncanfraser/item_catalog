@@ -86,9 +86,17 @@
         toastr.options = {
             "positionClass": "toast-bottom-full-width"
         }
-        {% with messages = get_flashed_messages() %}
-            {% for message in messages %}
-                toastr.success('{{ message }}');
+        {% with messages = get_flashed_messages(with_categories=True) %}
+            {% for category, message in messages %}
+                {% if category == 'notice' %}
+                    toastr.success('{{ message }}');
+                {% elif category == 'warning' %}
+                    toastr.warning('{{ message }}');
+                {% elif category == 'error' %}
+                    toastr.error('{{ message }}');
+                {% else %}
+                    toastr.info('{{ message }}');
+                {% endif %}
             {% endfor %}
         {% endwith %}
         {% if form and form.errors %}

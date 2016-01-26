@@ -329,7 +329,7 @@ def item_edit(item_id):
         item.edit_timestamp = datetime.utcnow()
         db.session.add(item)
         db.session.commit()
-        flash("Succesfully Saved %s" % item.name, 'notice')
+        flash("Successfully Saved %s" % item.name, 'notice')
         return redirect(url_for('item_view', item_id=item.id))
 
     return render_template('item_edit.html', form=form, item=item)
@@ -353,7 +353,7 @@ def item_delete(item_id):
     if request.method == 'POST':
         db.session.delete(item)
         db.session.commit()
-        flash("Succesfully deleted %s" % item.name, 'notice')
+        flash("Successfully Deleted %s" % item.name, 'notice')
         return redirect(url_for('category_view', category_id=item.category_id))
 
     return render_template('item_delete.html', item=item)
