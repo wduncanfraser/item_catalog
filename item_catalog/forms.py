@@ -1,6 +1,6 @@
 from flask_wtf import Form
 from wtforms import StringField, TextAreaField
-from wtforms.validators import DataRequired, URL, Optional, Length
+from wtforms.validators import DataRequired, Length
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from flask_wtf.file import FileField, FileAllowed
 from item_catalog.models import Category

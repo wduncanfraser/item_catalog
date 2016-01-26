@@ -6,10 +6,27 @@ import httplib2
 from item_catalog import app, db, google
 from item_catalog.models import Category, Item, User
 from item_catalog.forms import ItemForm
-from item_catalog.helpers import save_uploaded_image, get_user_id, get_user, create_user
+from item_catalog.helpers import save_uploaded_image, get_user_id, get_user, create_user, check_login, is_item_owner
 
 
-# Account views
+# ----Account views----#
+# Context Processor
+@app.context_processor
+def context_check_login():
+    """
+    Context processor to check if a user is logged in.
+    :return: dict containing boolean signifying if there is a logged in user and instance of the user
+    """
+    logged_in = check_login(session)
+    user = None
+
+    if logged_in:
+        user = get_user(session.get('user_id'))
+
+    return dict(logged_in=logged_in, user=user)
+
+
+# Login View
 @app.route('/login')
 def login():
     """
@@ -18,6 +35,7 @@ def login():
     return google.authorize(callback=url_for('authorized', _external=True))
 
 
+# Logout View
 @app.route('/logout', methods=['GET', 'POST'])
 def logout():
     """
@@ -28,19 +46,23 @@ def logout():
         return redirect(url_for('category_list'))
 
     if request.method == 'POST':
+        # Attempt to revoke oauth token
         url = '%s%s' % (app.config['GOOGLE_REVOKE_URL'], session['google_token'][0])
         h = httplib2.Http()
         result = h.request(url, 'GET')[0]
 
+        # Clear session
+        session.pop('google_token', None)
+        session.pop('google_id', None)
+        session.pop('name', None)
+        session.pop('email', None)
+        session.pop('picture', None)
+        session.pop('user_id', None)
+
         if result['status'] == '200':
-            session.pop('google_token', None)
-            session.pop('google_id', None)
-            session.pop('name', None)
-            session.pop('email', None)
-            session.pop('picture', None)
-            session.pop('user_id', None)
-            flash('Successfully Signed Out')
+            flash('Successfully Signed Out', 'notice')
         else:
+            flash('Successfully Signed Out', 'notice')
             flash('Failed to Revoke Google OAuth Token', 'error')
 
         return redirect(url_for('category_list'))
@@ -48,6 +70,7 @@ def logout():
     return render_template('logout.html')
 
 
+# View for handling authorization
 @app.route('/login/authorized')
 def authorized():
     """
@@ -76,16 +99,18 @@ def authorized():
     db.session.add(user)
     db.session.commit()
 
-    flash('Signed in as %s' % session['name'])
+    flash('Signed in as %s' % session['name'], 'notice')
     return redirect(url_for('category_list'))
 
 
+# Google token getter
 @google.tokengetter
 def get_google_oauth_token():
     return session.get('google_token')
 
 
-# Context processors
+# ----Item Catalog CRUD Views----#
+# Context processor
 @app.context_processor
 def context_get_categories():
     """
@@ -183,7 +208,10 @@ def item_view(item_id, category_id=None):
         category = None
         item = Item.query.get_or_404(item_id)
 
-    return render_template('item_view.html', category=category, item=item)
+    # Check if user is owner
+    owner = check_login(session) and is_item_owner(item, session.get('user_id'))
+
+    return render_template('item_view.html', category=category, item=item, owner=owner)
 
 
 # Item Image View
@@ -227,6 +255,10 @@ def item_new(category_id=None):
     :context form: Instance of :form:`item_catalog.ItemForm`
     :template: `item_edit.html`
     """
+    # Check if user is logged in
+    if not check_login(session):
+        abort(403)
+
     if category_id:
         category = Category.query.get_or_404(category_id)
     else:
@@ -239,6 +271,7 @@ def item_new(category_id=None):
         item = Item()
         form.populate_obj(item)
         item.picture = None
+        item.owner = User.query.get(session.get('user_id'))
         db.session.add(item)
         db.session.commit()
 
@@ -246,6 +279,7 @@ def item_new(category_id=None):
         if form.picture.data:
             data = form.picture.data
             filename = secure_filename(data.filename)
+            item_path = None
             try:
                 item_path = save_uploaded_image(filename, data, item)
             except:
@@ -265,11 +299,18 @@ def item_new(category_id=None):
 @app.route('/item/<int:item_id>/edit', methods=['GET', 'POST'])
 def item_edit(item_id):
     """
-    View for editing an existing item
+    View for editing an existing item. Check if current user is owner. Aborts otherwise.
     :param item_id: id of requested item
-    :return:
+    :context form: Instance of :form:`item_catalog.ItemForm`
+    :context item: Instance of :model:`item_catalog.Item`
+    :template: `item_edit.html`
     """
     item = Item.query.get_or_404(item_id)
+
+    # Check if user is logged in and the item owner. Abort if either check fails
+    if not check_login(session) or not is_item_owner(item, session.get('user_id')):
+        abort(403)
+
     form = ItemForm(obj=item)
 
     if form.validate_on_submit():
@@ -297,7 +338,17 @@ def item_edit(item_id):
 # Delete Item
 @app.route('/item/<int:item_id>/delete', methods=['GET', 'POST'])
 def item_delete(item_id):
+    """
+    View for deleting an existing item. Check if current user is owner. Aborts otherwise.
+    :param item_id: id of requested item
+    :context item: Instance of :model:`item_catalog.Item`
+    :template: `item_delete.html`
+    """
     item = Item.query.get_or_404(item_id)
+
+    # Check if user is logged in and the item owner. Abort if either check fails
+    if not check_login(session) or not is_item_owner(item, session.get('user_id')):
+        abort(403)
 
     if request.method == 'POST':
         db.session.delete(item)

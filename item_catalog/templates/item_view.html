@@ -24,14 +24,19 @@
                     </div>
                 {% endif %}
                 <div class="mdl-cell mdl-cell--12-col" align="left">
+                    Owner: {{ item.owner }}
+                </div>
+                <div class="mdl-cell mdl-cell--12-col" align="left">
                     Last Edited: {{ item.edit_timestamp }}
                 </div>
-                <div class="mdl-cell mdl-cell--12-col" align="center">
-                    <a class="mdl-button mdl-js-button mdl-button--raised"
-                       href="{{ url_for('item_edit', item_id=item.id) }}">Edit</a>
-                    <a class="mdl-button mdl-js-button mdl-button--raised"
-                       href="{{ url_for('item_delete', item_id = item.id) }}">Delete</a>
-                </div>
+                {% if owner %}
+                    <div class="mdl-cell mdl-cell--12-col" align="center">
+                        <a class="mdl-button mdl-js-button mdl-button--raised"
+                           href="{{ url_for('item_edit', item_id=item.id) }}">Edit</a>
+                        <a class="mdl-button mdl-js-button mdl-button--raised"
+                           href="{{ url_for('item_delete', item_id = item.id) }}">Delete</a>
+                    </div>
+                {% endif %}
             </div>
         </div>
         <div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--stretch"></div>

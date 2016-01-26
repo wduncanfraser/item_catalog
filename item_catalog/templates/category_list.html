@@ -6,6 +6,11 @@
         <div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--stretch"></div>
         <div class="mdl-cell mdl-cell--8-col mdl-cell--8-col-tablet" align="center">
             <div class="mdl-grid mdl-color--grey-100">
+                {% if logged_in %}
+                <div class="mdl-cell mdl-cell--12-col" align="left">
+                    Welcome, {{ user }}!
+                </div>
+                {% endif %}
                 <div class="mdl-cell mdl-cell--6-col" align="left">
                     <h2>Categories</h2>
                     {% for category in categories %}
@@ -19,8 +24,10 @@
                             <a href="{{ url_for('item_view', item_id = item.id, category_id = item.category.id) }}">{{ item }}</a>
                         </p>
                     {% endfor %}
+                    {% if logged_in %}
                     <hr>
                     <p><a href="{{ url_for('item_new') }}">Add Item</a></p>
+                    {% endif %}
                 </div>
             </div>
         </div>

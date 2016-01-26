@@ -62,7 +62,41 @@ def create_user(login_session):
         user = get_user(user_id)
         return user, False
     else:
-        user = User(login_session.get('name'), login_session.get('email'), login_session.get('picture'), login_session.get('google_id'))
+        user = User(login_session.get('name'), login_session.get('email'), login_session.get('picture'),
+                    login_session.get('google_id'))
         db.session.add(user)
         db.session.commit()
         return user, True
+
+
+# Function to check if specified Item is owned by the specified User id
+def is_item_owner(item, user_id):
+    """
+    Function to check if the specified user id own the specified item.
+    :param item: Instance of :model:`item_catalog.User`
+    :param user_id: User id
+    :return: Bool, True if item.user == user from user_id
+    """
+    try:
+        user = User.query.get(user_id)
+    except:
+        return False
+
+    if item.owner == user:
+        return True
+    else:
+        return False
+
+
+# Function to check if the specified session has a logged in user with a valid user id
+def check_login(session):
+    """
+    Function to check if the specified session has a logged in user
+    :param session: current flask session
+    :return: Boolean, true if session has a google_token and user_id
+    """
+    # Check that session has a google_token
+    if session.get('google_token') and session.get('user_id'):
+        return True
+
+    return False

@@ -10,10 +10,10 @@
                 <div class="mdl-grid mdl-color--grey-100">
                     <div class="mdl-cell mdl-cell--12-col" align="left">
                         <h2>Logout</h2>
-                        {% if session.get('picture') %}
-                            <img class="profile-image" src="{{ session.get('picture') }}">
+                        {% if user.picture %}
+                            <img class="profile-image" src="{{ user.picture }}">
                         {% endif %}
-                        <p>{{ session.get('name') }}, are you sure you want to logout?</p>
+                        <p>{{ user.name }}, are you sure you want to logout?</p>
                     </div>
                     <div class="mdl-cell mdl-cell--12-col" align="center">
                         <input class="mdl-button mdl-js-button mdl-button--raised" type="submit" value="Yes">

@@ -62,14 +62,17 @@ class Item(db.Model):
     edit_timestamp = db.Column(db.DateTime, default=func.now())
     category_id = db.Column(db.Integer, db.ForeignKey('category.id'))
     category = db.relationship(Category, backref='items')
+    owner_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    owner = db.relationship(User, backref='items')
 
     def __unicode__(self):
         return u'%s' % self.name
 
-    def __init__(self, name=None, description=None, category=None):
+    def __init__(self, name=None, description=None, category=None, owner=None):
         self.name = name
         self.description = description
         self.category = category
+        self.owner = owner
 
     @property
     def serialize(self):
