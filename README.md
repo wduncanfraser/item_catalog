@@ -7,6 +7,7 @@ Completed as part of Project 3 for the Udacity Full Stack Nonodegree.
 1.  [VirtualBox](https://www.virtualbox.org/) or [VMware Fusion/Workstation](https://www.vmware.com/)
 
 ## Usage
+### Getting Up and Running
 1.  Clone repository: `git clone https://github.com/wduncanfraser/item_catalog.git`.
 1.  Run `vagrant up` and then `vagrant ssh` to provision and log into the vm.
 1.  Once logged into the VM, you should already be in the project directory. If not, navigate to the project files with ```cd /home/vagrant/item_catalog```.
@@ -14,6 +15,14 @@ Completed as part of Project 3 for the Udacity Full Stack Nonodegree.
 1.  (Optional) Run `python test_data.py` to populate the database with some test data to get you started.
 1.  Run `python run.py` to run the Flask application for the item catalog.
 1.  Open a web browser and navigate to `http://localhost:5000`.
+
+### API
+There are multiple JSON endpoints and an atom feed implemented for the Item Catalog application.
++   Atom Feed: `http://localhost:5000/atom`
++   JSON endpoints
+    +   `http://localhost:5000/category/JSON`: List of all Categories.
+    +   `http://localhost:5000/category/<category_id>/JSON`: Category details and list of all Items in the specified category.
+    +   `http://localhost:5000/category/<category_id>/item/<item_id>/JSON` or `http://localhost:5000/item/<item_id>/JSON`: Item details for the specified item_id. If category_id is specified, it must match the item category or it will result in a 404.
 
 ## Structure
 +   item_catalog/: Item Catalog Flask application directory.
